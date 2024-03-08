@@ -16,13 +16,6 @@ func main() {
 	}
 	prometheus.MustRegister(releaseCollector)
 
-	go func() {
-		for {
-			releaseCollector.UpdateFromCatalog()
-			time.Sleep(time.Minute * 30)
-		}
-	}()
-
 	http.Handle("/metrics", promhttp.Handler())
 	server := &http.Server{
 		Addr:              ":8000",
@@ -31,4 +24,11 @@ func main() {
 	if err := server.ListenAndServe(); err != nil {
 		panic(err)
 	}
+
+	go func() {
+		for {
+			releaseCollector.UpdateFromCatalog()
+			time.Sleep(time.Minute * 30)
+		}
+	}()
 }

@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: release-exporter
+  namespace: release-exporter
+  labels:
+    app: release-exporter
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: release-exporter
+  template:
+    metadata:
+      labels:
+        app: release-exporter
+    spec:
+      containers:
+      - name: release-exporter
+        image: quay.io/giantswarm/release-exporter:{{ .Chart.Version }}
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi
+          limits:
+            cpu: 200m
+            memory: 200Mi
+        env:
+        - name: GITHUB_KEY
+          valueFrom:
+            secretKeyRef:
+              name: release-exporter
+              key: GITHUB_KEY
+              optional: false
+      - name: grafana-agent
+        image: grafana/agent:v0.25.0
+        resources:
+          requests:
+            cpu: 250m
+            memory: 250Mi
+          limits:
+            cpu: 250m
+            memory: 250Mi
+        args:
+        - -config.file=/etc/agent/agent.yaml
+        - -server.http.address=0.0.0.0:8001
+        securityContext:
+          allowPrivilegeEscalation: false
+          runAsNonRoot: true
+          runAsUser: 1000
+          runAsGroup: 1000
+          capabilities:
+            drop:
+            - ALL
+          seccompProfile:
+            type: RuntimeDefault
+        volumeMounts:
+        - name: grafana-agent
+          mountPath: /etc/agent
+        - name: agent-wal
+          mountPath: /tmp/wal
+      serviceAccountName: release-exporter
+      volumes:
+      - name: grafana-agent
+        configMap:
+          name: grafana-agent
+      - name: agent-wal
+        emptyDir: {}

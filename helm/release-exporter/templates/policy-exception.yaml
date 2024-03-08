@@ -1,0 +1,19 @@
+apiVersion: policy.giantswarm.io/v1alpha1
+kind: PolicyException
+metadata:
+  name: release-exporter
+  namespace: policy-exceptions
+  labels:
+    app: release-exporter
+spec:
+  policies:
+  - disallow-capabilities-strict
+  - restrict-seccomp-strict
+  - require-run-as-nonroot
+  - disallow-privilege-escalation
+  targets:
+  - kind: Deployment
+    names:
+    - release-exporter*
+    namespaces:
+    - release-exporter

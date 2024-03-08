@@ -43,7 +43,7 @@ func NewReleaseCollector() (*releaseCollector, error) {
 	var rc releaseCollector
 
 	rc.releaseDesc = prometheus.NewDesc(
-		prometheus.BuildFQName("operations", "release", "info"),
+		prometheus.BuildFQName("operations", "release", "latest_info"),
 		"App release information from Giant Swarm Catalog index file.",
 		[]string{"app", "team", "version"},
 		nil,

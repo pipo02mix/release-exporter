@@ -1,6 +1,8 @@
 package main
 
 import (
+	"flag"
+	"fmt"
 	"log"
 	"net/http"
 	"time"
@@ -9,7 +11,11 @@ import (
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
+var interval = flag.Int("run-every", 30, "The interval in minutes between updates")
+
 func main() {
+	flag.Parse()
+
 	releaseCollector, err := NewReleaseCollector()
 	if err != nil {
 		log.Fatal(err)
@@ -25,10 +31,17 @@ func main() {
 		panic(err)
 	}
 
-	go func() {
-		for {
-			releaseCollector.UpdateFromCatalog()
-			time.Sleep(time.Minute * 30)
-		}
-	}()
+	if *interval <= 0 {
+		fmt.Println("No interval specified, running once and exiting.")
+		releaseCollector.UpdateFromCatalog()
+	} else {
+		ticker := time.NewTicker(time.Duration(*interval) * time.Minute)
+
+		go func() {
+			for {
+				releaseCollector.UpdateFromCatalog()
+				<-ticker.C
+			}
+		}()
+	}
 }

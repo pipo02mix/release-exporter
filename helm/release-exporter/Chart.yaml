@@ -3,6 +3,6 @@ description: A Helm chart for release-exporter
 home: https://github.com/giantswarm/release-exporter
 icon: https://s.giantswarm.io/app-icons/prometheus/1/light.svg
 name: release-exporter
-version: 0.4.2
+version: 0.0.1
 annotations:
   application.giantswarm.io/team: "horizon"

@@ -22,15 +22,6 @@ func main() {
 	}
 	prometheus.MustRegister(releaseCollector)
 
-	http.Handle("/metrics", promhttp.Handler())
-	server := &http.Server{
-		Addr:              ":8000",
-		ReadHeaderTimeout: 5 * time.Second,
-	}
-	if err := server.ListenAndServe(); err != nil {
-		panic(err)
-	}
-
 	if *interval <= 0 {
 		fmt.Println("No interval specified, running once and exiting.")
 		releaseCollector.UpdateFromCatalog()
@@ -39,9 +30,19 @@ func main() {
 
 		go func() {
 			for {
+				fmt.Println("Updating entries from catalog.")
 				releaseCollector.UpdateFromCatalog()
 				<-ticker.C
 			}
 		}()
+	}
+
+	http.Handle("/metrics", promhttp.Handler())
+	server := &http.Server{
+		Addr:              ":8000",
+		ReadHeaderTimeout: 5 * time.Second,
+	}
+	if err := server.ListenAndServe(); err != nil {
+		panic(err)
 	}
 }

@@ -49,7 +49,7 @@ func NewReleaseCollector() (*releaseCollector, error) {
 		nil,
 	)
 
-	rc.componentReleases = rc.UpdateFromCatalog()
+	rc.componentReleases = []ComponentRelease{}
 
 	return &rc, nil
 }

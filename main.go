@@ -12,7 +12,7 @@ import (
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
-var interval = flag.Int("run-every", 30, "The interval in minutes between updates")
+var interval = flag.Int("run-every", 0, "The interval in minutes between updates")
 
 func main() {
 	flag.Parse()

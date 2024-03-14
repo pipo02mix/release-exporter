@@ -2,3 +2,5 @@ cortex:
   url: ""
   username: ""
   password: ""
+
+updateCacheEvery: 30m

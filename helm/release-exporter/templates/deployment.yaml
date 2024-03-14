@@ -19,7 +19,7 @@ spec:
       - name: release-exporter
         image: quay.io/giantswarm/release-exporter:{{ .Chart.Version }}
         args:
-        - --run-every=30
+        - --update-cache-every={{ .Values.updateCacheEvery }}
         resources:
           requests:
             cpu: 100m

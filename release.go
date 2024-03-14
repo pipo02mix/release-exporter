@@ -54,7 +54,7 @@ func NewReleaseCollector() (*releaseCollector, error) {
 	return &rc, nil
 }
 
-func (c *releaseCollector) UpdateFromCatalog() []ComponentRelease {
+func (rc *releaseCollector) UpdateFromCatalog() {
 	resp, err := http.Get("https://raw.githubusercontent.com/giantswarm/giantswarm-catalog/master/index.yaml")
 	if err != nil {
 		log.Fatalf("error: %v", err)
@@ -93,17 +93,17 @@ func (c *releaseCollector) UpdateFromCatalog() []ComponentRelease {
 		}
 	}
 
-	return crs
+	rc.componentReleases = crs
 }
 
-func (c *releaseCollector) Describe(ch chan<- *prometheus.Desc) {
-	ch <- c.releaseDesc
+func (rc *releaseCollector) Describe(ch chan<- *prometheus.Desc) {
+	ch <- rc.releaseDesc
 }
 
-func (c *releaseCollector) Collect(ch chan<- prometheus.Metric) {
-	for _, cr := range c.componentReleases {
+func (rc *releaseCollector) Collect(ch chan<- prometheus.Metric) {
+	for _, cr := range rc.componentReleases {
 		ch <- prometheus.MustNewConstMetric(
-			c.releaseDesc,
+			rc.releaseDesc,
 			prometheus.GaugeValue,
 			cr.State,
 			cr.Name,

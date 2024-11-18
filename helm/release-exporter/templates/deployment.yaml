@@ -18,6 +18,8 @@ spec:
       containers:
       - name: release-exporter
         image: quay.io/giantswarm/release-exporter:{{ .Chart.Version }}
+        args:
+        - --update-cache-every={{ .Values.updateCacheEvery }}
         resources:
           requests:
             cpu: 100m
@@ -25,15 +27,12 @@ spec:
           limits:
             cpu: 200m
             memory: 200Mi
-        env:
-        - name: GITHUB_KEY
-          valueFrom:
-            secretKeyRef:
-              name: release-exporter
-              key: GITHUB_KEY
-              optional: false
+        livenessProbe:
+          httpGet:
+            path: /metrics
+            port: 8000
       - name: grafana-agent
-        image: grafana/agent:v0.40.2
+        image: grafana/agent:v0.43.3
         resources:
           requests:
             cpu: 250m

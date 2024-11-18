@@ -15,6 +15,9 @@
                     "type": "string"
                 }
             }
+        },
+        "updateCacheEvery": {
+          "type": "string"
         }
     }
 }

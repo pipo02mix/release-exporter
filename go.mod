@@ -2,7 +2,7 @@ module github.com/giantswarm/release-exporter
 
 go 1.21
 
-toolchain go1.23.3
+toolchain go1.23.4
 
 require (
 	github.com/Masterminds/semver/v3 v3.3.0

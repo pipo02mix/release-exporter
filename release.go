@@ -7,9 +7,9 @@ import (
 	"net/http"
 	"sort"
 
-	"gopkg.in/yaml.v3"
+	yaml "gopkg.in/yaml.v3"
 
-	"github.com/Masterminds/semver/v3"
+	semver "github.com/Masterminds/semver/v3"
 	"github.com/prometheus/client_golang/prometheus"
 )
 

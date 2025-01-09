@@ -20,6 +20,9 @@ spec:
         image: quay.io/giantswarm/release-exporter:{{ .Chart.Version }}
         args:
         - --update-cache-every={{ .Values.updateCacheEvery }}
+        ports:
+          - containerPort: 8000
+            name: metrics
         resources:
           requests:
             cpu: 100m

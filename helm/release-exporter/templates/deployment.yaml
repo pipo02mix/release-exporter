@@ -35,7 +35,7 @@ spec:
             path: /metrics
             port: 8000
       - name: grafana-agent
-        image: grafana/agent:v0.43.3
+        image: grafana/agent:v0.43.4
         resources:
           requests:
             cpu: 250m
